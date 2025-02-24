@@ -1,8 +1,10 @@
 const sideRouter = require('./site');
-const comicRouter = require('./comic')
+const comicRouter = require('./comic');
+const categoryRouter = require('./category');
 
 function route(app) {
-    app.use('/comic', comicRouter)
+    app.use('/categories', categoryRouter)
+    app.use('/comics', comicRouter)
     app.use('/', sideRouter)
 }
 

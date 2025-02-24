@@ -8,7 +8,8 @@ const ComicSchema = new Schema(
     {
         title: { type: String, require: true }, // Comic name
         description: { type: String }, // Comic description
-        coverImage: { type: String }, // Cover image URL
+        categories: { type: Array }, // Comic description
+        coverImage: { type: String, require: true }, // Cover image URL
         status: { type: String, enum: ['ongoing', 'completed'], default: 'ongoing' },
         slug: { type: String, slug: 'title', unique: true },
         deleteAt: { type: Date, default: null } 
