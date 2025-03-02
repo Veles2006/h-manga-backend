@@ -10,14 +10,19 @@ const ComicSchema = new Schema(
         description: { type: String }, // Comic description
         categories: { type: Array }, // Comic description
         coverImage: { type: String, require: true }, // Cover image URL
-        status: { type: String, enum: ['ongoing', 'completed'], default: 'ongoing' },
+        status: {
+            type: String,
+            enum: ['ongoing', 'completed'],
+            default: 'ongoing',
+        },
+        views: { type: Number, default: 0 },
         slug: { type: String, slug: 'title', unique: true },
-        deleteAt: { type: Date, default: null } 
+        deleteAt: { type: Date, default: null },
     },
     {
-        timestamps: true
+        timestamps: true,
     }
-)
+);
 
 mongoose.plugin(slug);
 ComicSchema.plugin(mongooseDelete, {
