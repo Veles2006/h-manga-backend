@@ -15,6 +15,7 @@ const ComicSchema = new Schema(
             enum: ['ongoing', 'completed'],
             default: 'ongoing',
         },
+        chapter: { type: Number, default: 0 },
         views: { type: Number, default: 0 },
         slug: { type: String, slug: 'title', unique: true },
         deleteAt: { type: Date, default: null },
