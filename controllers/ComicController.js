@@ -19,7 +19,7 @@ class ComicController {
             const hotComics = await Comic.find()
                 .sort({ views: -1, updatedAt: -1 }) // Sắp xếp theo lượt xem giảm dần và thời gian cập nhật gần nhất
                 .limit(10); // Lấy 10 truyện hot nhất
-    
+
             res.json(hotComics);
         } catch (error) {
             res.status(500).send('Có lỗi xảy ra: ' + error.message); // Thêm chi tiết lỗi
@@ -30,15 +30,15 @@ class ComicController {
         const page = parseInt(req.params.page) || 1; // Lấy trang từ URL
         const limit = 42; // Mỗi trang sẽ hiển thị 42 truyện
         const skip = (page - 1) * limit; // Bỏ qua số lượng truyện đã có ở các trang trước
-    
+
         try {
             const comics = await Comic.find()
                 .skip(skip) // Bỏ qua số lượng truyện đã hiển thị
                 .limit(limit); // Chỉ lấy 42 truyện trên trang này
-    
+
             const totalComics = await Comic.countDocuments(); // Đếm tổng số truyện trong cơ sở dữ liệu
             const totalPages = Math.ceil(totalComics / limit); // Tính số trang
-    
+
             res.json({
                 comics,
                 page,
@@ -49,7 +49,22 @@ class ComicController {
             res.status(500).send('Có lỗi xảy ra: ' + error.message); // Thêm chi tiết lỗi
         }
     }
-    
+
+    async getComic(req, res, next) {
+        try {
+            const { slug } = req.params;
+            const comic = await Comic.findOne({ slug });
+
+            if (!comic) {
+                return res
+                    .status(404)
+                    .json({ message: 'Không tìm thấy truyện' });
+            }
+            res.status(200).json(comic);
+        } catch (error) {
+            res.status(500).json({ message: 'Error server', error });
+        }
+    }
 
     async createComic(req, res, next) {
         try {
