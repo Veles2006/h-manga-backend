@@ -7,42 +7,71 @@ class ChapterController {
     async getChapters(req, res) {
         try {
             const { slug } = req.params;
-            console.log('🔍 Slug nhận được:', slug); // Debug
             const comic = await Comic.findOne({ slug });
-    
+
             if (!comic) {
-                return res.status(404).json({ message: 'Không tìm thấy truyện' });
+                return res
+                    .status(404)
+                    .json({ message: 'Không tìm thấy truyện' });
             }
-    
+
             const chapters = await Chapter.find({ comic: comic._id }).sort({
                 number: -1,
             });
-    
+
             // Chuyển đổi ngày tháng năm
-            const formattedChapters = chapters.map(chap => {
-                const updatedAt = chap.updatedAt instanceof Date
-                    ? chap.updatedAt
-                    : new Date(chap.updatedAt); // Đảm bảo nó là kiểu Date
-            
+            const formattedChapters = chapters.map((chap) => {
+                const updatedAt =
+                    chap.updatedAt instanceof Date
+                        ? chap.updatedAt
+                        : new Date(chap.updatedAt); // Đảm bảo nó là kiểu Date
+
                 // Lấy ngày, tháng, năm với padding '0'
                 const day = String(updatedAt.getDate()).padStart(2, '0'); // Đảm bảo 2 chữ số
                 const month = String(updatedAt.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
                 const year = updatedAt.getFullYear();
-            
+
                 return {
                     ...chap.toObject(),
                     updatedAt: `${day}/${month}/${year}`, // Định dạng đúng 2 chữ số
                 };
             });
-            
-    
+
             res.status(200).json(formattedChapters);
         } catch (err) {
             console.error('❌ Lỗi:', err);
             res.status(500).json({ message: 'Lỗi server', err });
         }
     }
-    
+
+    async getChapter(req, res) {
+        try {
+            const { slug, chapter } = req.params;
+            const chapterNumber = Number(chapter);
+
+            const comic = await Comic.findOne({ slug });
+
+            if (!comic) {
+                return res
+                    .status(404)
+                    .json({ message: 'Không tìm thấy truyện' });
+            }
+
+            const chapterObject = await Chapter.findOne({
+                comic: comic._id,
+                number: chapterNumber,
+            }).lean();
+
+            if (!chapterObject) {
+                return res
+                    .status(404)
+                    .json({ message: 'Không tìm thấy chương' });
+            }
+            res.status(200).json(chapterObject);
+        } catch (err) {
+            res.status(500).json({ message: 'Lỗi server', err });
+        }
+    }
 
     async createChapter(req, res) {
         try {

@@ -81,8 +81,6 @@ class ComicController {
                 })
             );
 
-            console.log(comicsWithLastChapter);
-
             res.json({
                 comics: comicsWithLastChapter,
                 page,
