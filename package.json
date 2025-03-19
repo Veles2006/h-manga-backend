@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "beautiful": "lint-staged",
-    "start": "nodemon --inspect index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "beautiful": "lint-staged",
+  "start": "node index.js",
+  "dev": "nodemon --inspect index.js",
+  "test": "echo \"Error: no test specified\" && exit 1"
+},
   "lint-staged": {
     "**/*.{js,json}": "prettier --single-quote --trailing-comma all --tab-width 4 --write"
   },
