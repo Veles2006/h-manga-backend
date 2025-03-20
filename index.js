@@ -5,7 +5,6 @@ const methodOverride = require('method-override');
 const { engine: handlebars } = require('express-handlebars');
 const cors = require('cors');
 const app = express();
-const port = 5000;
 require('dotenv').config();
 
 const route = require('./routes');
@@ -41,6 +40,5 @@ app.use(cors());
 // Routes init
 route(app);
 
-app.listen(port, () => {
-    console.log(`App listening on port ${port}`);
-});
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, "0.0.0.0", () => console.log(`🚀 Server running on port ${PORT}`));
