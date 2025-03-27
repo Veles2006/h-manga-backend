@@ -12,9 +12,7 @@ const ComicSchema = new Schema(
         },
         anotherTitle: {
             type: [String],
-            default: function () {
-                return [this.title]; // ✅ Lấy giá trị của title
-            },
+            default: '',
         },
         author: {
             type: String,
@@ -53,7 +51,9 @@ const ComicSchema = new Schema(
         },
         slug: {
             type: String,
+            slug: 'title',
             unique: true, // Đường dẫn SEO-friendly
+            slugPaddingSize: 4,   // VD: one-piece-0001 nếu bị trùng
         },
         deleteAt: {
             type: Date,

@@ -9,6 +9,7 @@ router.get('/hot', comicController.getHotComics);
 router.get('/detail/:slug', comicController.getComic);
 router.get('/page/:page', comicController.getOnePageComic)
 router.get('/comic-page', comicController.getAllComics);
+router.get('/search', comicController.searchComics);
 router.get('/', comicController.getComic);
 
 module.exports = router;

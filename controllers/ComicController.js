@@ -42,7 +42,9 @@ class ComicController {
                 hotComics.map(async (comic) => {
                     const lastChapter = await Chapter.findOne({
                         comic: comic._id,
-                    }).sort({ number: -1 }).select("number"); // Lấy chương mới nhất
+                    })
+                        .sort({ number: -1 })
+                        .select('number'); // Lấy chương mới nhất
                     return {
                         ...comic.toObject(),
                         lastChapterNumber: lastChapter ? lastChapter.number : 0,
@@ -73,7 +75,9 @@ class ComicController {
                 comics.map(async (comic) => {
                     const lastChapter = await Chapter.findOne({
                         comic: comic._id,
-                    }).sort({ number: -1 }).select("number"); // Lấy chương mới nhất
+                    })
+                        .sort({ number: -1 })
+                        .select('number'); // Lấy chương mới nhất
                     return {
                         ...comic.toObject(),
                         lastChapterNumber: lastChapter ? lastChapter.number : 0,
@@ -137,6 +141,37 @@ class ComicController {
         } catch (err) {
             console.error('Lỗi server:', err);
             res.status(500).json({ message: 'Có lỗi xảy ra' });
+        }
+    }
+
+    async searchComics(req, res, next) {
+        try {
+            const query = req.query.q || '';
+            if (!query) return res.json({ comics: [] });
+
+            const comics = await Comic.find({
+                title: { $regex: query, $options: 'i' },
+            }).limit(10);
+
+            const comicsWithLastChapter = await Promise.all(
+                comics.map(async (comic) => {
+                    const lastChapter = await Chapter.findOne({
+                        comic: comic._id,
+                    })
+                        .sort({ number: -1 })
+                        .select('number');
+
+                    return {
+                        ...comic.toObject(),
+                        comicsWithLastChapter: lastChapter?.number || 0,
+                    };
+                })
+            );
+
+            res.json({ comics: comicsWithLastChapter });
+        } catch (error) {
+            console.error('Lỗi tìm kiếm truyện:', error);
+            res.status(500).json({ message: 'Đã có lỗi khi tìm kiếm truyện' });
         }
     }
 }
