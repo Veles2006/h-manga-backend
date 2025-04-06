@@ -1,8 +1,8 @@
-var express = require('express');
-var router = express.Router();
+import { Router } from "express";
+import comicController from "@/controllers/ComicController";
 var { uploadComic: upload } = require('../config/multer');
 
-const comicController = require('../controllers/ComicController');
+const router = Router();
 
 router.post('/create', upload.single("coverImage"), comicController.createComic);
 router.get('/hot', comicController.getHotComics);
@@ -12,4 +12,4 @@ router.get('/comic-page', comicController.getAllComics);
 router.get('/search', comicController.searchComics);
 router.get('/', comicController.getComic);
 
-module.exports = router;
+export default router;

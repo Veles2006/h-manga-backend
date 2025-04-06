@@ -1,63 +1,83 @@
-const mongoose = require('mongoose');
+import mongoose, { Schema, model, Document } from 'mongoose';
 const slug = require('mongoose-slug-generator');
 const mongooseDelete = require('mongoose-delete');
 
-const Schema = mongoose.Schema;
+mongoose.plugin(slug);
 
-const ComicSchema = new Schema(
+// Interface cho Comic document
+export interface IComic extends Document {
+    title: string;
+    anotherTitle: string[];
+    author: string;
+    description?: string;
+    categories?: string[];
+    coverImage: string;
+    status: 'ongoing' | 'completed';
+    chapters: number;
+    likes: number;
+    follows: number;
+    views: number;
+    slug: string;
+    deleteAt?: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+// Schema
+const ComicSchema = new Schema<IComic>(
     {
         title: {
             type: String,
-            required: true, // Tên truyện (Bắt buộc)
+            required: true,
         },
         anotherTitle: {
             type: [String],
-            default: '',
+            default: [],
         },
         author: {
             type: String,
             default: 'Đang cập nhật',
         },
         description: {
-            type: String, // Mô tả truyện
+            type: String,
         },
         categories: {
-            type: [String], // Danh sách thể loại (mảng String)
+            type: [String],
         },
         coverImage: {
             type: String,
-            required: true, // Ảnh bìa truyện (Bắt buộc)
+            required: true,
         },
         status: {
             type: String,
-            enum: ['ongoing', 'completed'], // Trạng thái: "Đang cập nhật" hoặc "Hoàn thành"
+            enum: ['ongoing', 'completed'],
             default: 'ongoing',
         },
         chapters: {
             type: Number,
-            default: 0, // Số lượng chương
+            default: 0,
         },
         likes: {
             type: Number,
-            default: 0, // Số lượt thích
+            default: 0,
         },
         follows: {
             type: Number,
-            default: 0, // Số lượt theo dõi
+            default: 0,
         },
         views: {
             type: Number,
-            default: 0, // Số lượt xem
+            default: 0,
         },
         slug: {
             type: String,
             slug: 'title',
-            unique: true, // Đường dẫn SEO-friendly
-            slugPaddingSize: 4,   // VD: one-piece-0001 nếu bị trùng
+            unique: true,
+            slugPaddingSize: 4,
         },
         deleteAt: {
             type: Date,
-            default: null, // Ngày xóa (soft delete)
+            default: null,
         },
     },
     {
@@ -65,10 +85,11 @@ const ComicSchema = new Schema(
     }
 );
 
-mongoose.plugin(slug);
+// Plugin soft delete
 ComicSchema.plugin(mongooseDelete, {
     deletedAt: true,
     overrideMethods: 'all',
 });
 
-module.exports = mongoose.model('Comic', ComicSchema);
+// Xuất model
+export default model<IComic>('Comic', ComicSchema);

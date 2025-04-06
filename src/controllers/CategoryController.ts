@@ -1,9 +1,10 @@
-const mongoose = require('mongoose');
-const Category = require('../models/Category');
+import { Request, Response, NextFunction } from 'express';
+import mongoose from 'mongoose';
+import Category from '@/models/Category'; // giả sử đã chuyển model sang TS
 const { mongooseToObject } = require('../utils/mongoose');
 
 class CategoryController {
-    async getAllCategories(req, res, next) {
+    async getAllCategories(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const categories = await Category.find().sort({ title: 1 });
             res.status(200).json(categories);
@@ -12,7 +13,7 @@ class CategoryController {
         }
     }
 
-    async createCategory(req, res, next) {
+    async createCategory(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { title, description } = req.body;
 
@@ -22,14 +23,12 @@ class CategoryController {
             });
 
             const saveCategory = await category.save();
-
             res.status(201).json(saveCategory);
         } catch (err) {
             console.log('Lỗi khi lưu thể loại: ', err);
-            
-            res.status(500).json({ err: 'Không thể lưu thể loại' })
+            res.status(500).json({ err: 'Không thể lưu thể loại' });
         }
     }
 }
 
-module.exports = new CategoryController();
+export default new CategoryController();

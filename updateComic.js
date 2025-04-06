@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { connect } = require('./config/db'); // Import kết nối MongoDB
+const { connect } = require('./src/config/db'); // Import kết nối MongoDB
 
 const Comic = mongoose.model(
     'Comic',

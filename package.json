@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-  "beautiful": "lint-staged",
-  "start": "node index.js",
-  "dev": "nodemon --inspect index.js",
-  "test": "echo \"Error: no test specified\" && exit 1"
-},
+    "start": "nodemon",
+    "build": "tsc",
+    "beautiful": "lint-staged",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "lint-staged": {
-    "**/*.{js,json}": "prettier --single-quote --trailing-comma all --tab-width 4 --write"
+    "**/*.{ts,json}": "prettier --single-quote --trailing-comma all --tab-width 4 --write"
   },
   "husky": {
     "hooks": {
@@ -32,10 +32,21 @@
     "sass": "^1.83.1"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/dotenv": "^6.1.1",
+    "@types/express": "^5.0.1",
+    "@types/express-handlebars": "^5.3.1",
+    "@types/method-override": "^3.0.0",
+    "@types/morgan": "^1.9.9",
+    "@types/multer": "^1.4.12",
+    "@types/node": "^22.13.14",
     "husky": "^9.1.7",
     "lint-staged": "^15.3.0",
     "morgan": "^1.10.0",
-    "nodemon": "^3.1.7",
-    "prettier": "^3.4.2"
+    "nodemon": "^3.1.9",
+    "prettier": "^3.4.2",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.8.2"
   }
 }
